@@ -80,7 +80,8 @@ const UserInfoComponent = props => {
     >
       <CircleAvatar
         customStyles={{ size: AVATAR_SIZE }}
-        image={getExternalImageResource(props.url)}
+        image={props.avatarSource}
+        onPress={props.onAvatarChange}
       />
 
       <Text style={{ fontFamily: FIOLEXGIRLVH, fontSize: 25 }}>

@@ -5,3 +5,11 @@ export const getExternalImageResource = (image, defaultImage) => {
       }
     : defaultImage;
 };
+
+export const getBase64ImageResource = (image, defaultImage) => {
+  return image
+    ? {
+        uri: `data:${image.type};base64,${image.data}`
+      }
+    : defaultImage;
+};

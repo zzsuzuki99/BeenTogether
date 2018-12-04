@@ -1,9 +1,16 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { AsyncStorage } from "react-native";
 import HomePresentation from "./components";
 import { AVATAR_SIZE } from "../../assets/dimens";
 import moment from "moment";
 import * as Zodiac from "../../constants/Zodiac";
+import ImagePicker from "react-native-image-picker";
+import {
+  getExternalImageResource,
+  getBase64ImageResource
+} from "../../utils/image";
+import RNFetchBlob from 'rn-fetch-blob'
+
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -11,15 +18,35 @@ class HomeScreen extends Component {
       whileContainerHeight: 0,
       numberOfDaysMemory: this.getNumberOfDaysMemory("23-06-2018"),
       dateOfBirthMale: "11-02-1995",
-      dateOfBirthFemale: "05-07-1995"
+      dateOfBirthFemale: "05-07-1995",
+      avatarSourceFemale: null
     };
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem("AVATAR_MALE")
+      .then(value => {
+        var image = JSON.parse(value);
+        this.setState({
+          avatarSourceMale: getBase64ImageResource(image)
+        });
+      })
+      .done();
+    AsyncStorage.getItem("AVATAR_FEMALE")
+      .then(value => {
+        var image = JSON.parse(value);
+        this.setState({
+          avatarSourceFemale: getBase64ImageResource(image)
+        });
+      })
+      .done();
   }
 
   getNumberOfDaysMemory(dateMemory) {
     const currentDate = moment();
     const dateMemoryMoment = moment(dateMemory, "DD-MM-YYYY");
     const numberOfDaysMemory = currentDate.diff(dateMemoryMoment, "days");
-    return numberOfDaysMemory;
+    return numberOfDaysMemory + 1;
   }
 
   onInfoUserLayout(e) {
@@ -32,14 +59,6 @@ class HomeScreen extends Component {
     const date = moment(dateOfBirth, "DDMMYYYY");
     const day = parseInt(date.format("D"));
     const month = parseInt(date.format("M"));
-    console.log(
-      "Get Zodiac>>>>",
-      day,
-      month,
-      typeof month,
-      month === 2,
-      day <= 18
-    );
     if ((month === 1 && day <= 20) || (month === 12 && day >= 22)) {
       return Zodiac.CAPRICORN;
     } else if ((month === 1 && day >= 21) || (month === 2 && day <= 18)) {
@@ -75,6 +94,62 @@ class HomeScreen extends Component {
     return age;
   }
 
+  onAvatarFemaleChange() {
+    const options = {
+      title: "Select Avatar",
+      storageOptions: {
+        skipBackup: true,
+        path: "images"
+      }
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        AsyncStorage.setItem("AVATAR_FEMALE", JSON.stringify(response));
+        const source = getBase64ImageResource(response);
+        this.setState({
+          avatarSourceFemale: source
+        });
+      }
+    });
+  }
+
+  onAvatarMaleChange() {
+    const options = {
+      title: "Select Avatar",
+      storageOptions: {
+        skipBackup: true,
+        path: "images"
+      }
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        AsyncStorage.setItem("AVATAR_MALE", JSON.stringify(response));
+        const source = getBase64ImageResource(response);
+        this.setState({
+          avatarSourceMale: source
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <HomePresentation
@@ -85,6 +160,10 @@ class HomeScreen extends Component {
         ageOfFemale={this.getAge(this.state.dateOfBirthFemale)}
         zodiacOfMale={this.getZodiacSign(this.state.dateOfBirthMale)}
         zodiacOfFemale={this.getZodiacSign(this.state.dateOfBirthFemale)}
+        onAvatarMaleChange={this.onAvatarMaleChange.bind(this)}
+        onAvatarFemaleChange={this.onAvatarFemaleChange.bind(this)}
+        avatarSourceMale={this.state.avatarSourceMale}
+        avatarSourceFemale={this.state.avatarSourceFemale}
       />
     );
   }

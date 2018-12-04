@@ -8,7 +8,6 @@ import {
   OPENSANS_SEMIBOLD,
   FIOLEXGIRLVH
 } from "../../../assets/fonts";
-import Wave from "../../../components/Wave";
 import { getExternalImageResource } from "../../../utils/image";
 import UserInfoComponent from "../../../components/UserInfo";
 
@@ -25,7 +24,6 @@ const HomePresentation = props => {
       >
         <StatusBar translucent={true} backgroundColor={"transparent"} />
         <HeaderComponent />
-        <Wave />
         <View
           style={{
             flex: 2,
@@ -33,7 +31,7 @@ const HomePresentation = props => {
             alignItems: "center"
           }}
         >
-          {/* <View
+          <View
             style={{
               width: 200,
               height: 200,
@@ -49,7 +47,7 @@ const HomePresentation = props => {
             <Text style={{ fontFamily: FIOLEXGIRLVH, fontSize: 20 }}>
               ngày yêu
             </Text>
-          </View> */}
+          </View>
           {/* <View style={{ marginTop: 32 }}>
             <Text>159</Text>
             <Text>asdasd</Text>
@@ -81,15 +79,17 @@ const HomePresentation = props => {
               flex: 1.7
             }}
           >
-            {/* <UserInfoComponent
+            <UserInfoComponent
               isMale={true}
+              avatarSource={props.avatarSourceMale}
               name="Kris"
               zodiac={props.zodiacOfMale}
+              onAvatarChange={props.onAvatarMaleChange}
               age={props.ageOfMale}
-              url="http://blog-app.ca-central-1.elasticbeanstalk.com/api/file/file-1543662185409.JPG"
-            /> */}
+              url="http://blog-app.ca-central-1.elasticbeanstalk.com/api/file/file-1543637871916.jpg"
+            />
           </View>
-          {/* <View
+          <View
             style={{
               margin: 0,
               justifyContent: "center",
@@ -102,19 +102,21 @@ const HomePresentation = props => {
               color="red"
               name="heart"
             />
-          </View> */}
+          </View>
           <View
             style={{
               alignItems: "center",
               flex: 1.7
             }}
           >
-            {/* <UserInfoComponent
+            <UserInfoComponent
               name="Jenny"
               age={props.ageOfFemale}
+              avatarSource={props.avatarSourceFemale}
+              onAvatarChange={props.onAvatarFemaleChange}
               zodiac={props.zodiacOfFemale}
               url="http://blog-app.ca-central-1.elasticbeanstalk.com/api/file/file-1543662185409.JPG"
-            /> */}
+            />
           </View>
         </View>
       </ImageBackground>
