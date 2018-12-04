@@ -10,6 +10,7 @@ import {
 } from "../../../assets/fonts";
 import { getExternalImageResource } from "../../../utils/image";
 import UserInfoComponent from "../../../components/UserInfo";
+import AnniversaryComponent from "../../../components/Anniversary";
 
 const HomePresentation = props => {
   return (
@@ -31,27 +32,7 @@ const HomePresentation = props => {
             alignItems: "center"
           }}
         >
-          <View
-            style={{
-              width: 200,
-              height: 200,
-              borderRadius: 100,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Text style={{ fontSize: 32, fontFamily: FIOLEXGIRLVH }}>
-              {props.numberOfDaysMemory}
-            </Text>
-            <Text style={{ fontFamily: FIOLEXGIRLVH, fontSize: 20 }}>
-              ngày yêu
-            </Text>
-          </View>
-          {/* <View style={{ marginTop: 32 }}>
-            <Text>159</Text>
-            <Text>asdasd</Text>
-          </View> */}
+           <AnniversaryComponent />
         </View>
         <View
           style={{
@@ -63,7 +44,7 @@ const HomePresentation = props => {
           }}
           onLayout={props.onInfoUserLayout}
         >
-          <View
+          {/* <View
             style={{
               position: "absolute",
               left: 0,
@@ -117,7 +98,7 @@ const HomePresentation = props => {
               zodiac={props.zodiacOfFemale}
               url="http://blog-app.ca-central-1.elasticbeanstalk.com/api/file/file-1543662185409.JPG"
             />
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     </View>

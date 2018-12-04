@@ -9,7 +9,7 @@ import {
   getExternalImageResource,
   getBase64ImageResource
 } from "../../utils/image";
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from "rn-fetch-blob";
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -24,22 +24,23 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    AsyncStorage.getItem("AVATAR_MALE")
-      .then(value => {
-        var image = JSON.parse(value);
-        this.setState({
-          avatarSourceMale: getBase64ImageResource(image)
-        });
-      })
-      .done();
-    AsyncStorage.getItem("AVATAR_FEMALE")
-      .then(value => {
-        var image = JSON.parse(value);
-        this.setState({
-          avatarSourceFemale: getBase64ImageResource(image)
-        });
-      })
-      .done();
+    const dirs = RNFetchBlob.fs.dirs;
+
+    var pathFemaleImage = dirs.DCIMDir + "/imageFemale.png";
+    var pathMaleImage = dirs.DCIMDir + "/imageMale.png";
+    RNFetchBlob.fs.readFile(pathFemaleImage, "base64").then(res => {
+      const source = getBase64ImageResource({ type: "image/jpeg", data: res });
+      console.log("123456>>>", source);
+      this.setState({
+        avatarSourceFemale: source
+      });
+    });
+    RNFetchBlob.fs.readFile(pathMaleImage, "base64").then(res => {
+      const source = getBase64ImageResource({ type: "image/jpeg", data: res });
+      this.setState({
+        avatarSourceMale: source
+      });
+    });
   }
 
   getNumberOfDaysMemory(dateMemory) {
@@ -113,7 +114,15 @@ class HomeScreen extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        AsyncStorage.setItem("AVATAR_FEMALE", JSON.stringify(response));
+        // var Base64Code = re.split("data:image/png;base64,"); //base64Image is my image base64 string
+        console.log("123456>>>", response);
+        const dirs = RNFetchBlob.fs.dirs;
+
+        var path = dirs.DCIMDir + "/imageFemale.png";
+        RNFetchBlob.fs.writeFile(path, response.data, "base64").then(res => {
+          console.log("File : ", res);
+        });
+
         const source = getBase64ImageResource(response);
         this.setState({
           avatarSourceFemale: source
@@ -141,7 +150,12 @@ class HomeScreen extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        AsyncStorage.setItem("AVATAR_MALE", JSON.stringify(response));
+        const dirs = RNFetchBlob.fs.dirs;
+
+        var path = dirs.DCIMDir + "/imageMale.png";
+        RNFetchBlob.fs.writeFile(path, response.data, "base64").then(res => {
+          console.log("File : ", res);
+        });
         const source = getBase64ImageResource(response);
         this.setState({
           avatarSourceMale: source
